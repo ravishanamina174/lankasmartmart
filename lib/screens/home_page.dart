@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'categories_page.dart';
 
 // HomePage - StatelessWidget, UI only
 class HomePage extends StatelessWidget {
@@ -105,7 +106,16 @@ class HomePage extends StatelessWidget {
                   children: [
                     _buildCategoryChip(true, 'All'),
                     const SizedBox(width: 8),
-                    _buildCategoryChip(false, 'Groceries'),
+                    // Groceries chip navigates to CategoriesPage when tapped
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const CategoriesPage()),
+                        );
+                      },
+                      child: _buildCategoryChip(false, 'Groceries'),
+                    ),
                     const SizedBox(width: 8),
                     _buildCategoryChip(false, 'Household'),
                     const SizedBox(width: 8),
