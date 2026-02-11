@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'product_details_page.dart';
+import 'profile_page.dart';
 
 // CategoriesPage - StatelessWidget (UI only)
 class CategoriesPage extends StatelessWidget {
@@ -90,7 +91,15 @@ class CategoriesPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  const CircleAvatar(radius: 20, child: Icon(Icons.person)),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const ProfilePage()),
+                      );
+                    },
+                    child: const CircleAvatar(radius: 20, child: Icon(Icons.person)),
+                  ),
                   const SizedBox(width: 8),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

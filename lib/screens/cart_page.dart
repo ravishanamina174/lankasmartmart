@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'delivery_details_page.dart';
 
 // CartPage - StatelessWidget, UI-only
 class CartPage extends StatelessWidget {
@@ -114,7 +115,12 @@ class CartPage extends StatelessWidget {
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
                   backgroundColor: Colors.orange,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const DeliveryDetailsPage()),
+                  );
+                },
                 child: const Text('Confirm Order', style: TextStyle(fontSize: 18)),
               ),
 

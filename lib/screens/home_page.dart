@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'categories_page.dart';
+import 'profile_page.dart';
 
 // HomePage - StatelessWidget, UI only
 class HomePage extends StatelessWidget {
@@ -70,7 +71,15 @@ class HomePage extends StatelessWidget {
               // Top row: profile + name + notification
               Row(
                 children: [
-                  const CircleAvatar(radius: 28, child: Icon(Icons.person, size: 32)),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const ProfilePage()),
+                      );
+                    },
+                    child: const CircleAvatar(radius: 28, child: Icon(Icons.person, size: 32)),
+                  ),
                   const SizedBox(width: 12),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,13 +90,9 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-                  // Notification icon
                   IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_none)),
                 ],
               ),
-
-              const SizedBox(height: 20),
-
               // Search bar area
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
