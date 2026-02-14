@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'home_page.dart';
+import 'categories_page.dart';
+import 'cart_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -30,8 +33,9 @@ class ProfilePage extends StatelessWidget {
             Center(
               child: CircleAvatar(
                 radius: 48,
-                backgroundColor: Colors.grey.shade300,
-                child: Icon(Icons.person, size: 60, color: Colors.grey.shade700),
+                backgroundImage: AssetImage('assets/images/boy.png'),
+                backgroundColor: Colors.grey[300],
+                child: Icon(Icons.person, size: 60, color: Colors.grey[700]),
               ),
             ),
             const SizedBox(height: 12),
@@ -78,7 +82,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   Text(
-                    "Lanka Smart Mart is your one-stop mobile shopping solution for groceries, household items, personal care products, and stationery. With branches in Maharagama, Gampaha, and Kandy, we bring trusted local shopping to your fingertips.\nEnjoy convenient ordering, quality products, and exciting offers like New Year promotions and weekend discounts — all in one smart app.",
+                    " 'Lanka Smart Mart is your one-stop mobile shopping solution for groceries, household items, personal care products, and stationery. With branches in Maharagama, Gampaha, and Kandy, we bring trusted local shopping to your fingertips.\nEnjoy convenient ordering, quality products, and exciting offers like New Year promotions and weekend discounts — all in one smart app.' ",
                     style: TextStyle(fontSize: 15, color: Colors.black87),
                   ),
                 ],
@@ -89,6 +93,52 @@ class ProfilePage extends StatelessWidget {
         ),
       ),
       backgroundColor: Colors.white,
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white,
+        items: [
+          BottomNavigationBarItem(
+            icon: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                );
+              },
+              child: const Icon(Icons.home, color: Colors.grey),
+            ),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CategoriesPage()),
+                );
+              },
+              child: const Icon(Icons.list, color: Colors.grey),
+            ),
+            label: 'Categories',
+          ),
+          BottomNavigationBarItem(
+            icon: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CartPage()),
+                );
+              },
+              child: const Icon(Icons.shopping_cart, color: Colors.grey),
+            ),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person, color: Colors.black87),
+            label: 'Profile',
+          ),
+        ],
+      ),
     );
   }
 

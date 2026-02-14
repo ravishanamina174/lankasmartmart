@@ -76,7 +76,7 @@ class LoginPage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => const HomePage()),
                     );
                   },
-                  child: const Text('Log In', style: TextStyle(fontSize: 18)),
+                  child: const Text('Log In', style: TextStyle(fontSize: 18, color: Colors.white)),
                 ),
               ),
 

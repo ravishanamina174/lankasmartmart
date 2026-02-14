@@ -139,7 +139,7 @@ class PaymentPage extends StatelessWidget {
                       },
                       child: const Text(
                         "Pay now",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                     ),
                   ),

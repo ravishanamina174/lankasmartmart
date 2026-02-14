@@ -15,9 +15,15 @@ class LocationPage extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // Placeholder for map
-          Center(
-            child: Icon(Icons.map, size: 100, color: Colors.grey.shade400),
+          // Display location image
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: Image.asset(
+              'assets/images/location.jpeg',
+              fit: BoxFit.cover,
+            ),
           ),
           // Zoom controls (dummy)
           Positioned(
@@ -63,7 +69,14 @@ class LocationPage extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_none),
-            onPressed: () {},
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('No new notifications'),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+            },
           ),
         ],
         backgroundColor: Colors.white,

@@ -75,9 +75,25 @@ class ProductDetailsPage extends StatelessWidget {
                               Text(productPrice, style: TextStyle(color: Colors.grey[600], fontSize: 12)),
                             ],
                           ),
-                          Container(
-                            decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.orange),
-                            child: IconButton(onPressed: () {}, icon: const Icon(Icons.add, color: Colors.white)),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const CartPage()),
+                              );
+                            },
+                            child: Container(
+                              decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.orange),
+                              child: IconButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => const CartPage()),
+                                  );
+                                },
+                                icon: const Icon(Icons.add, color: Colors.white),
+                              ),
+                            ),
                           )
                         ],
                       ),
@@ -119,7 +135,7 @@ class ProductDetailsPage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => const CartPage()),
                     );
                   },
-                  child: const Text('Add to Cart', style: TextStyle(fontSize: 18)),
+                  child: const Text('Add to Cart', style: TextStyle(fontSize: 18, color: Colors.white)),
                 ),
               ),
 

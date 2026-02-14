@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'categories_page.dart';
 import 'profile_page.dart';
+import 'cart_page.dart';
+import 'product_details_page.dart';
 
 // HomePage - StatelessWidget, UI only
 class HomePage extends StatelessWidget {
@@ -8,50 +10,86 @@ class HomePage extends StatelessWidget {
 
   // A small helper to build product cards
   Widget _buildProductCard(BuildContext context, String name, String price) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.15), blurRadius: 6, offset: const Offset(0, 3))],
-      ),
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Image placeholder
-          Expanded(
-            child: Center(
-              child: Icon(Icons.image, size: 56, color: Colors.grey[400]),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailsPage(
+              productName: name,
+              productPrice: price,
             ),
           ),
-
-          const SizedBox(height: 8),
-
-          // Product name and price row
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 4),
-                    Text(price, style: TextStyle(color: Colors.grey[600], fontSize: 12)),
-                  ],
-                ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.15), blurRadius: 6, offset: const Offset(0, 3))],
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image placeholder
+            Expanded(
+              child: Center(
+                child: Icon(Icons.image, size: 56, color: Colors.grey[400]),
               ),
-              // Add button (dummy)
-              Container(
-                decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.orange),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.add, color: Colors.white),
+            ),
+
+            const SizedBox(height: 8),
+
+            // Product name and price row
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 4),
+                      Text(price, style: TextStyle(color: Colors.grey[600], fontSize: 12)),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+                // Add button
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProductDetailsPage(
+                          productName: name,
+                          productPrice: price,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.orange),
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetailsPage(
+                              productName: name,
+                              productPrice: price,
+                            ),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.add, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -78,7 +116,12 @@ class HomePage extends StatelessWidget {
                         MaterialPageRoute(builder: (_) => const ProfilePage()),
                       );
                     },
-                    child: const CircleAvatar(radius: 28, child: Icon(Icons.person, size: 32)),
+                    child: CircleAvatar(
+                      radius: 28,
+                      backgroundImage: AssetImage('assets/images/boy.png'),
+                      backgroundColor: Colors.grey[300],
+                      child: const Icon(Icons.person, size: 32),
+                    ),
                   ),
                   const SizedBox(width: 12),
                   Column(
@@ -90,7 +133,17 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_none)),
+                  IconButton(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('No new notifications'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.notifications_none),
+                  ),
                 ],
               ),
               // Search bar area
@@ -147,6 +200,52 @@ class HomePage extends StatelessWidget {
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home, color: Colors.black87),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CategoriesPage()),
+                );
+              },
+              child: const Icon(Icons.list, color: Colors.grey),
+            ),
+            label: 'Categories',
+          ),
+          BottomNavigationBarItem(
+            icon: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CartPage()),
+                );
+              },
+              child: const Icon(Icons.shopping_cart, color: Colors.grey),
+            ),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProfilePage()),
+                );
+              },
+              child: const Icon(Icons.person, color: Colors.grey),
+            ),
+            label: 'Profile',
+          ),
+        ],
       ),
     );
   }

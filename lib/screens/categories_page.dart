@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'product_details_page.dart';
 import 'profile_page.dart';
+import 'home_page.dart';
+import 'cart_page.dart';
 
 // CategoriesPage - StatelessWidget (UI only)
 class CategoriesPage extends StatelessWidget {
@@ -43,11 +45,34 @@ class CategoriesPage extends StatelessWidget {
             const SizedBox(height: 6),
             Align(
               alignment: Alignment.bottomRight,
-              child: Container(
-                decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.orange),
-                child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.add, color: Colors.white),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProductDetailsPage(
+                        productName: name,
+                        productPrice: price,
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.orange),
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ProductDetailsPage(
+                            productName: name,
+                            productPrice: price,
+                          ),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.add, color: Colors.white),
+                  ),
                 ),
               ),
             ),
@@ -98,7 +123,12 @@ class CategoriesPage extends StatelessWidget {
                         MaterialPageRoute(builder: (_) => const ProfilePage()),
                       );
                     },
-                    child: const CircleAvatar(radius: 20, child: Icon(Icons.person)),
+                    child: CircleAvatar(
+                      radius: 20,
+                      backgroundImage: AssetImage('assets/images/boy.png'),
+                      backgroundColor: Colors.grey[300],
+                      child: const Icon(Icons.person),
+                    ),
                   ),
                   const SizedBox(width: 8),
                   Column(
@@ -110,7 +140,17 @@ class CategoriesPage extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_none)),
+                  IconButton(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('No new notifications'),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.notifications_none),
+                  ),
                 ],
               ),
 
@@ -121,7 +161,15 @@ class CategoriesPage extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    _categoryChip(false, 'All'),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const HomePage()),
+                        );
+                      },
+                      child: _categoryChip(false, 'All'),
+                    ),
                     const SizedBox(width: 8),
                     _categoryChip(true, 'Groceries'),
                     const SizedBox(width: 8),
@@ -170,6 +218,52 @@ class CategoriesPage extends StatelessWidget {
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white,
+        items: [
+          BottomNavigationBarItem(
+            icon: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                );
+              },
+              child: const Icon(Icons.home, color: Colors.grey),
+            ),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list, color: Colors.black87),
+            label: 'Categories',
+          ),
+          BottomNavigationBarItem(
+            icon: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CartPage()),
+                );
+              },
+              child: const Icon(Icons.shopping_cart, color: Colors.grey),
+            ),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ProfilePage()),
+                );
+              },
+              child: const Icon(Icons.person, color: Colors.grey),
+            ),
+            label: 'Profile',
+          ),
+        ],
       ),
     );
   }

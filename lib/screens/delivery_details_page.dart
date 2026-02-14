@@ -24,7 +24,14 @@ class DeliveryDetailsPage extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_none),
-            onPressed: () {},
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('No new notifications'),
+                  duration: Duration(seconds: 2),
+                ),
+              );
+            },
           ),
         ],
         backgroundColor: Colors.white,
@@ -164,7 +171,7 @@ class DeliveryDetailsPage extends StatelessWidget {
                                 MaterialPageRoute(builder: (_) => const LocationPage()),
                               );
                             },
-                            child: const Text("Track Order"),
+                            child: const Text("Track Order", style: TextStyle(color: Colors.white)),
                           ),
                         ),
                       ],
@@ -196,7 +203,7 @@ class DeliveryDetailsPage extends StatelessWidget {
             },
             child: const Text(
               "Proceed to Checkout",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
             ),
           ),
         ),

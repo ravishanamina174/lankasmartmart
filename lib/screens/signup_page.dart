@@ -87,7 +87,7 @@ class SignUpPage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => const HomePage()),
                     );
                   },
-                  child: const Text('Sign Up', style: TextStyle(fontSize: 18)),
+                  child: const Text('Sign Up', style: TextStyle(fontSize: 18, color: Colors.white)),
                 ),
               ),
 

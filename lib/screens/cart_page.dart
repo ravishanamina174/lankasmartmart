@@ -121,7 +121,7 @@ class CartPage extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => const DeliveryDetailsPage()),
                   );
                 },
-                child: const Text('Confirm Order', style: TextStyle(fontSize: 18)),
+                child: const Text('Confirm Order', style: TextStyle(fontSize: 18, color: Colors.white)),
               ),
 
               const SizedBox(height: 12),
