@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'screens/signup_page.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,8 +17,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      // Initial route: SignUpPage as requested
-      home: const SignUpPage(),
+      // Initial route: SplashScreen (will navigate to SignUpPage)
+      home: const SplashScreen(),
     );
   }
 }

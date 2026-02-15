@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/notification_popup.dart';
 
 class LocationPage extends StatelessWidget {
   const LocationPage({Key? key}) : super(key: key);
@@ -70,12 +71,7 @@ class LocationPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.notifications_none),
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('No new notifications'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
+              showNotificationPopup(context);
             },
           ),
         ],

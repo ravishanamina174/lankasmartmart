@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/notification_popup.dart';
 import 'location_page.dart';
 import 'payment_page.dart';
 
@@ -25,12 +26,7 @@ class DeliveryDetailsPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.notifications_none),
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('No new notifications'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
+              showNotificationPopup(context);
             },
           ),
         ],

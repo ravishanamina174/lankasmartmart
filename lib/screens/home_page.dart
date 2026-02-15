@@ -3,13 +3,14 @@ import 'categories_page.dart';
 import 'profile_page.dart';
 import 'cart_page.dart';
 import 'product_details_page.dart';
+import '../widgets/notification_popup.dart';
 
 // HomePage - StatelessWidget, UI only
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
   // A small helper to build product cards
-  Widget _buildProductCard(BuildContext context, String name, String price) {
+  Widget _buildProductCard(BuildContext context, String name, String price, String imageAsset) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -32,10 +33,17 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image placeholder
+            // Image
             Expanded(
               child: Center(
-                child: Icon(Icons.image, size: 56, color: Colors.grey[400]),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Image.asset(
+                    imageAsset,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) => Icon(Icons.image, size: 56, color: Colors.grey[400]),
+                  ),
+                ),
               ),
             ),
 
@@ -98,6 +106,12 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final productNames = ['Fresh Strawberry', 'Red Apple', 'Banana', 'Mango'];
     final productPrices = ['RS 2650/kg', 'RS 180/kg', 'RS 120/kg', 'RS 350/kg'];
+    final productImages = [
+      'assets/images/strawberry.png',
+      'assets/images/red_apple.png',
+      'assets/images/banana.png',
+      'assets/images/mango.png',
+    ];
 
     return Scaffold(
       body: SafeArea(
@@ -120,7 +134,6 @@ class HomePage extends StatelessWidget {
                       radius: 28,
                       backgroundImage: AssetImage('assets/images/boy.png'),
                       backgroundColor: Colors.grey[300],
-                      child: const Icon(Icons.person, size: 32),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -135,12 +148,7 @@ class HomePage extends StatelessWidget {
                   const Spacer(),
                   IconButton(
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('No new notifications'),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
+                      showNotificationPopup(context);
                     },
                     icon: const Icon(Icons.notifications_none),
                   ),
@@ -193,7 +201,7 @@ class HomePage extends StatelessWidget {
                   mainAxisSpacing: 12,
                   childAspectRatio: 0.78,
                   children: List.generate(4, (index) {
-                    return _buildProductCard(context, productNames[index], productPrices[index]);
+                    return _buildProductCard(context, productNames[index], productPrices[index], productImages[index]);
                   }),
                 ),
               ),

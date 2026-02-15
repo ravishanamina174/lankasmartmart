@@ -3,6 +3,7 @@ import 'product_details_page.dart';
 import 'profile_page.dart';
 import 'home_page.dart';
 import 'cart_page.dart';
+import '../widgets/notification_popup.dart';
 
 // CategoriesPage - StatelessWidget (UI only)
 class CategoriesPage extends StatelessWidget {
@@ -127,7 +128,6 @@ class CategoriesPage extends StatelessWidget {
                       radius: 20,
                       backgroundImage: AssetImage('assets/images/boy.png'),
                       backgroundColor: Colors.grey[300],
-                      child: const Icon(Icons.person),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -142,12 +142,7 @@ class CategoriesPage extends StatelessWidget {
                   const Spacer(),
                   IconButton(
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('No new notifications'),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
+                      showNotificationPopup(context);
                     },
                     icon: const Icon(Icons.notifications_none),
                   ),

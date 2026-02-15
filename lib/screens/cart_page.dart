@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'delivery_details_page.dart';
+import '../widgets/notification_popup.dart';
 
 // CartPage - StatelessWidget, UI-only
 class CartPage extends StatelessWidget {
@@ -52,7 +53,7 @@ class CartPage extends StatelessWidget {
         title: const Text('Cart Details', style: TextStyle(color: Colors.black)),
         centerTitle: true,
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_none, color: Colors.black))
+          IconButton(onPressed: () { showNotificationPopup(context); }, icon: const Icon(Icons.notifications_none, color: Colors.black))
         ],
       ),
       body: SafeArea(

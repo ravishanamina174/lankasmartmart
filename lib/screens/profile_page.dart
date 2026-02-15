@@ -35,7 +35,6 @@ class ProfilePage extends StatelessWidget {
                 radius: 48,
                 backgroundImage: AssetImage('assets/images/boy.png'),
                 backgroundColor: Colors.grey[300],
-                child: Icon(Icons.person, size: 60, color: Colors.grey[700]),
               ),
             ),
             const SizedBox(height: 12),
