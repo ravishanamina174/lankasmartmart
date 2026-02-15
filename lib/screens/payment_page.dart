@@ -52,7 +52,7 @@ class PaymentPage extends StatelessWidget {
               padding: const EdgeInsets.all(18),
               decoration: BoxDecoration(
                 color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(1),
                 border: Border.all(color: Colors.grey.shade300),
               ),
               child: Column(
@@ -126,7 +126,7 @@ class PaymentPage extends StatelessWidget {
                     height: 48,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
+                        backgroundColor: const Color.fromARGB(255, 63, 76, 255),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),

@@ -77,7 +77,7 @@ class ProfilePage extends StatelessWidget {
                 children: const [
                   Text(
                     "About Us",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 18,color: Color.fromARGB(255, 142, 6, 6)),
                   ),
                   SizedBox(height: 8),
                   Text(

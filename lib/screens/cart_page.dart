@@ -65,7 +65,7 @@ class CartPage extends StatelessWidget {
               Expanded(
                 child: ListView(
                   children: [
-                    _cartItem('Fresh Orange', 8, '02/03/2026', 'RS 3180'),
+                    _cartItem('Banana', 8, '02/03/2026', 'RS 3180'),
                     _cartItem('Brinjal', 5, '02/03/2026', 'RS 270'),
                     _cartItem('Fresh Grapes', 3, '02/03/2026', 'RS 1410'),
                   ],
