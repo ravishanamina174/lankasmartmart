@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/signup_page.dart';
+// import 'screens/signup_page.dart';
 import 'screens/splash_screen.dart';
 
 void main() {
