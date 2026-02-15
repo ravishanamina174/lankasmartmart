@@ -157,6 +157,7 @@ class HomePage extends StatelessWidget {
               // Search bar area
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
+                margin: const EdgeInsets.symmetric(vertical: 16),
                 decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(12)),
                 child: const TextField(
                   decoration: InputDecoration(border: InputBorder.none, hintText: 'Search products', icon: Icon(Icons.search)),
