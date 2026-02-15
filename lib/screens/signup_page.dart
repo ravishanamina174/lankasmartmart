@@ -104,20 +104,34 @@ class SignUpPage extends StatelessWidget {
                 children: [
                   IconButton(
                     onPressed: () {},
-                    icon: const Icon(Icons.apple),
+                    icon: Image.asset(
+                      'assets/images/google.png',
+                      width: 32,
+                      height: 32,
+                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.g_mobiledata),
+                    ),
                     iconSize: 32,
                   ),
                   const SizedBox(width: 16),
                   IconButton(
                     onPressed: () {},
-                    icon: const Icon(Icons.g_mobiledata),
+                    icon: Image.asset(
+                      'assets/images/facebook.png',
+                      width: 32,
+                      height: 32,
+                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.facebook),
+                    ),
                     iconSize: 32,
                   ),
                   const SizedBox(width: 16),
                   IconButton(
                     onPressed: () {},
-                    icon: const Icon(Icons.facebook),
-                    color: Colors.blueAccent,
+                    icon: Image.asset(
+                      'assets/images/microsoft.png',
+                      width: 32,
+                      height: 32,
+                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.apple),
+                    ),
                     iconSize: 32,
                   ),
                 ],

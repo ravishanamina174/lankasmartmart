@@ -125,7 +125,7 @@ class DeliveryDetailsPage extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  // Delivery image (placeholder)
+                  // Delivery image
                   Container(
                     width: 80,
                     height: 80,
@@ -133,7 +133,11 @@ class DeliveryDetailsPage extends StatelessWidget {
                       color: Colors.green.shade100,
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: const Icon(Icons.delivery_dining, size: 48, color: Colors.green),
+                    child: Image.asset(
+                      'assets/images/cartoon.png',
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) => const Icon(Icons.delivery_dining, size: 48, color: Colors.green),
+                    ),
                   ),
                   const SizedBox(width: 16),
                   // Info

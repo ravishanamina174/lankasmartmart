@@ -10,7 +10,7 @@ class CategoriesPage extends StatelessWidget {
   const CategoriesPage({Key? key}) : super(key: key);
 
   // Helper to build the product card used in horizontal lists
-  Widget _productCard(BuildContext context, String name, String price) {
+  Widget _productCard(BuildContext context, String name, String price, String imageAsset) {
     return GestureDetector(
       onTap: () {
         // Navigate to ProductDetailsPage when tapped
@@ -37,7 +37,16 @@ class CategoriesPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: Center(child: Icon(Icons.image, size: 48, color: Colors.grey[400])),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Image.asset(
+                    imageAsset,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) => Icon(Icons.image, size: 48, color: Colors.grey[400]),
+                  ),
+                ),
+              ),
             ),
             const SizedBox(height: 8),
             Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
@@ -86,15 +95,15 @@ class CategoriesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fruits = [
-      {'name': 'Fresh Grapes', 'price': 'RS 1630/500g'},
-      {'name': 'Fresh Strawberry', 'price': 'RS 2650/kg'},
-      {'name': 'Red Apple', 'price': 'RS 180/kg'},
+      {'name': 'Fresh Grapes', 'price': 'RS 1630/500g', 'image': 'assets/images/grapes.png'},
+      {'name': 'Fresh Strawberry', 'price': 'RS 2650/kg', 'image': 'assets/images/strawberry.png'},
+      {'name': 'Red Apple', 'price': 'RS 180/kg', 'image': 'assets/images/red_apple.png'},
     ];
 
     final vegetables = [
-      {'name': 'Brinjal', 'price': 'RS 90/kg'},
-      {'name': 'Leek', 'price': 'RS 120/kg'},
-      {'name': 'Carrot', 'price': 'RS 140/kg'},
+      {'name': 'Brinjal', 'price': 'RS 90/kg', 'image': 'assets/images/brinjal.png'},
+      {'name': 'Leek', 'price': 'RS 120/kg', 'image': 'assets/images/leek.png'},
+      {'name': 'Carrot', 'price': 'RS 140/kg', 'image': 'assets/images/carrot.png'},
     ];
 
     return Scaffold(
@@ -187,7 +196,7 @@ class CategoriesPage extends StatelessWidget {
                   itemCount: fruits.length,
                   itemBuilder: (context, index) {
                     final item = fruits[index];
-                    return _productCard(context, item['name']!, item['price']!);
+                    return _productCard(context, item['name']!, item['price']!, item['image']!);
                   },
                 ),
               ),
@@ -204,7 +213,7 @@ class CategoriesPage extends StatelessWidget {
                   itemCount: vegetables.length,
                   itemBuilder: (context, index) {
                     final item = vegetables[index];
-                    return _productCard(context, item['name']!, item['price']!);
+                    return _productCard(context, item['name']!, item['price']!, item['image']!);
                   },
                 ),
               ),

@@ -6,24 +6,42 @@ class PaymentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Dummy icons for payment methods
+    // Payment icons using asset images
     Widget paymentIcons = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         // Visa
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Icon(Icons.credit_card, color: Colors.blue, size: 36),
+          child: Image.asset(
+            'assets/images/visa.png',
+            width: 36,
+            height: 36,
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) => Icon(Icons.credit_card, color: Colors.blue, size: 36),
+          ),
         ),
-        // MasterCard
+        // Master
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Icon(Icons.credit_card, color: Colors.red, size: 36),
+          child: Image.asset(
+            'assets/images/master.png',
+            width: 36,
+            height: 36,
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) => Icon(Icons.credit_card, color: Colors.red, size: 36),
+          ),
         ),
-        // GPay
+        // Google Pay
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Icon(Icons.account_balance_wallet, color: Colors.black, size: 36),
+          child: Image.asset(
+            'assets/images/google_pay.png',
+            width: 36,
+            height: 36,
+            fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) => Icon(Icons.account_balance_wallet, color: Colors.black, size: 36),
+          ),
         ),
       ],
     );

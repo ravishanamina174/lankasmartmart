@@ -6,7 +6,7 @@ import '../widgets/notification_popup.dart';
 class CartPage extends StatelessWidget {
   const CartPage({Key? key}) : super(key: key);
 
-  Widget _cartItem(String name, int qty, String date, String price) {
+  Widget _cartItem(String name, int qty, String date, String price, String imageAsset) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(12),
@@ -17,7 +17,16 @@ class CartPage extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Container(width: 64, height: 64, decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(8)), child: const Icon(Icons.image, size: 36, color: Colors.grey)),
+          Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(color: Colors.grey[200], borderRadius: BorderRadius.circular(8)),
+            child: Image.asset(
+              imageAsset,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) => const Icon(Icons.image, size: 36, color: Colors.grey),
+            ),
+          ),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -65,9 +74,9 @@ class CartPage extends StatelessWidget {
               Expanded(
                 child: ListView(
                   children: [
-                    _cartItem('Banana', 8, '02/03/2026', 'RS 3180'),
-                    _cartItem('Brinjal', 5, '02/03/2026', 'RS 270'),
-                    _cartItem('Fresh Grapes', 3, '02/03/2026', 'RS 1410'),
+                    _cartItem('Banana', 8, '02/03/2026', 'RS 3180', 'assets/images/banana.png'),
+                    _cartItem('Brinjal', 5, '02/03/2026', 'RS 270', 'assets/images/brinjal.png'),
+                    _cartItem('Fresh Grapes', 3, '02/03/2026', 'RS 1410', 'assets/images/grapes.png'),
                   ],
                 ),
               ),

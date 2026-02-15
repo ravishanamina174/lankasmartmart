@@ -65,6 +65,17 @@ flutter:
     - assets/images/red_apple.png
     - assets/images/banana.png
     - assets/images/mango.png
+    - assets/images/grapes.png
+    - assets/images/brinjal.png
+    - assets/images/leek.png
+    - assets/images/carrot.png
+    - assets/images/visa.png
+    - assets/images/google_pay.png
+    - assets/images/master.png
+    - assets/images/cartoon.png
+    - assets/images/facebook.png
+    - assets/images/google.png
+    - assets/images/microsoft.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -16,6 +16,20 @@ class ProductDetailsPage extends StatelessWidget {
     this.productDescription = 'Carefully picked and skillfully packaged farm fresh produce. Images for illustration purposes only.',
   })  : super(key: key);
 
+  String _getProductImage(String productName) {
+    final imageMap = {
+      'Fresh Strawberry': 'assets/images/strawberry.png',
+      'Red Apple': 'assets/images/red_apple.png',
+      'Banana': 'assets/images/banana.png',
+      'Mango': 'assets/images/mango.png',
+      'Fresh Grapes': 'assets/images/grapes.png',
+      'Brinjal': 'assets/images/brinjal.png',
+      'Leek': 'assets/images/leek.png',
+      'Carrot': 'assets/images/carrot.png',
+    };
+    return imageMap[productName] ?? 'assets/images/strawberry.png';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +73,16 @@ class ProductDetailsPage extends StatelessWidget {
                 child: Column(
                   children: [
                     Expanded(
-                      child: Center(child: Icon(Icons.image, size: 120, color: Colors.grey[400])),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Image.asset(
+                            _getProductImage(productName),
+                            fit: BoxFit.contain,
+                            errorBuilder: (context, error, stackTrace) => Icon(Icons.image, size: 120, color: Colors.grey[400]),
+                          ),
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Padding(
