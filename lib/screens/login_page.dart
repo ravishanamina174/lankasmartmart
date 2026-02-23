@@ -12,13 +12,31 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
-  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _isLoading = false;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> _login() async {
+    // Validation
+    if (_emailController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please enter your email")),
+      );
+      return;
+    }
+
+    if (_passwordController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please enter your password")),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
 
     try {
       await _auth.signInWithEmailAndPassword(
@@ -26,22 +44,42 @@ class _LoginPageState extends State<LoginPage> {
         password: _passwordController.text.trim(),
       );
 
+      if (!mounted) return;
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const HomePage()),
       );
 
     } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+
+      String errorMessage = "Login failed";
+      
+      if (e.code == 'user-not-found') {
+        errorMessage = "No user found for that email";
+      } else if (e.code == 'wrong-password') {
+        errorMessage = "Wrong password provided";
+      } else if (e.code == 'invalid-email') {
+        errorMessage = "Invalid email format";
+      } else {
+        errorMessage = e.message ?? "Login failed";
+      }
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message ?? "Login failed")),
+        SnackBar(content: Text(errorMessage)),
       );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
   @override
   void dispose() {
-    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -68,22 +106,25 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: 32),
 
               TextField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Enter your name',
-                  border: UnderlineInputBorder(),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              TextField(
                 controller: _emailController,
+                enabled: !_isLoading,
                 decoration: const InputDecoration(
                   labelText: 'Email address',
                   border: UnderlineInputBorder(),
                 ),
                 keyboardType: TextInputType.emailAddress,
+              ),
+
+              const SizedBox(height: 20),
+
+              TextField(
+                controller: _passwordController,
+                enabled: !_isLoading,
+                decoration: const InputDecoration(
+                  labelText: 'Password',
+                  border: UnderlineInputBorder(),
+                ),
+                obscureText: true,
               ),
 
               const SizedBox(height: 12),
@@ -107,9 +148,18 @@ class _LoginPageState extends State<LoginPage> {
                         borderRadius: BorderRadius.circular(28)),
                     backgroundColor: const Color.fromARGB(221, 0, 0, 0),
                   ),
-                  onPressed: _login,
-                  child: const Text('Log In',
-                      style: TextStyle(fontSize: 18, color: Colors.white)),
+                  onPressed: _isLoading ? null : _login,
+                  child: _isLoading
+                      ? const SizedBox(
+                          width: 24,
+                          height: 24,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : const Text('Log In',
+                          style: TextStyle(fontSize: 18, color: Colors.white)),
                 ),
               ),
 
