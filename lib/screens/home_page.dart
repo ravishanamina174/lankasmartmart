@@ -4,6 +4,8 @@ import 'profile_page.dart';
 import 'cart_page.dart';
 import 'product_details_page.dart';
 import '../widgets/notification_popup.dart';
+import 'login_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 // HomePage - StatelessWidget, UI only
 class HomePage extends StatelessWidget {
@@ -151,6 +153,24 @@ class HomePage extends StatelessWidget {
                       showNotificationPopup(context);
                     },
                     icon: const Icon(Icons.notifications_none),
+                  ),
+                  IconButton(
+                    onPressed: () async {
+                      final navigator = Navigator.of(context);
+                      final messenger = ScaffoldMessenger.of(context);
+                      try {
+                        await FirebaseAuth.instance.signOut();
+
+                        navigator.pushReplacement(
+                          MaterialPageRoute(builder: (context) => const LoginPage()),
+                        );
+                      } on FirebaseAuthException catch (e) {
+                        messenger.showSnackBar(
+                          SnackBar(content: Text(e.message ?? 'Sign out failed')),
+                        );
+                      }
+                    },
+                    icon: const Icon(Icons.logout),
                   ),
                 ],
               ),

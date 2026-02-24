@@ -206,7 +206,7 @@ class _LoginPageState extends State<LoginPage> {
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const SignUpPage()),

@@ -36,12 +36,15 @@ class _SignUpPageState extends State<SignUpPage> {
         password: _passwordController.text.trim(),
       );
 
+      if (!mounted) return;
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const HomePage()),
       );
 
     } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.message ?? "Signup failed")),
@@ -178,7 +181,7 @@ class _SignUpPageState extends State<SignUpPage> {
               Center(
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                           builder: (context) => const LoginPage()),
