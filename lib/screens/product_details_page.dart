@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'cart_page.dart';
+import '../models/cart_model.dart';
 
 // ProductDetailsPage - StatelessWidget, UI only
 class ProductDetailsPage extends StatelessWidget {
@@ -100,18 +102,20 @@ class ProductDetailsPage extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const CartPage()),
+                              Provider.of<CartProvider>(context, listen: false).addItem(
+                                name: productName,
+                                priceString: productPrice,
+                                image: _getProductImage(productName),
                               );
                             },
                             child: Container(
                               decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.orange),
                               child: IconButton(
                                 onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => const CartPage()),
+                                  Provider.of<CartProvider>(context, listen: false).addItem(
+                                    name: productName,
+                                    priceString: productPrice,
+                                    image: _getProductImage(productName),
                                   );
                                 },
                                 icon: const Icon(Icons.add, color: Colors.white),
@@ -152,9 +156,10 @@ class ProductDetailsPage extends StatelessWidget {
                     backgroundColor: Colors.orange,
                   ),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const CartPage()),
+                    Provider.of<CartProvider>(context, listen: false).addItem(
+                      name: productName,
+                      priceString: productPrice,
+                      image: _getProductImage(productName),
                     );
                   },
                   child: const Text('Add to Cart', style: TextStyle(fontSize: 18, color: Colors.white)),

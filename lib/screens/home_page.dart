@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'categories_page.dart';
 import 'profile_page.dart';
 import 'cart_page.dart';
 import 'product_details_page.dart';
+import '../models/cart_model.dart';
 import '../widgets/notification_popup.dart';
 import 'login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -65,32 +67,16 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
                 ),
-                // Add button
+                // Add button -> add to cart (no navigation)
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProductDetailsPage(
-                          productName: name,
-                          productPrice: price,
-                        ),
-                      ),
-                    );
+                    Provider.of<CartProvider>(context, listen: false).addItem(name: name, priceString: price, image: imageAsset);
                   },
                   child: Container(
                     decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.orange),
                     child: IconButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProductDetailsPage(
-                              productName: name,
-                              productPrice: price,
-                            ),
-                          ),
-                        );
+                        Provider.of<CartProvider>(context, listen: false).addItem(name: name, priceString: price, image: imageAsset);
                       },
                       icon: const Icon(Icons.add, color: Colors.white),
                     ),

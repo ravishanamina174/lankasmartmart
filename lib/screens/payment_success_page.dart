@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'home_page.dart';
+import '../models/cart_model.dart';
 
 class PaymentSuccessPage extends StatelessWidget {
   const PaymentSuccessPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Dummy payment details
-    const amount = "RS 5390.00";
+    // payment details will pull from cart provider
+    final cart = Provider.of<CartProvider>(context);
+    final amount = cart.formatRs(cart.subTotal);
     const txnId = "TXN-7891224";
     const paymentMethod = "****4242";
     const date = "FEB 3, 2026";

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'payment_success_page.dart';
+import '../models/cart_model.dart';
 
 class PaymentPage extends StatelessWidget {
   const PaymentPage({Key? key}) : super(key: key);
@@ -130,13 +132,15 @@ class PaymentPage extends StatelessWidget {
                   paymentIcons,
                   const SizedBox(height: 18),
                   // Charge
-                  const Text(
-                    "Charge :  RS 5390.00",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
+                  Consumer<CartProvider>(builder: (context, cart, _) {
+                    return Text(
+                      "Charge :  ${cart.formatRs(cart.subTotal)}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    );
+                  }),
                   const SizedBox(height: 18),
                   // Pay Now Button
                   SizedBox(
