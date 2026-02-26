@@ -132,8 +132,7 @@ class ProductDetailsPage extends StatelessWidget {
               Text(productName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
               const SizedBox(height: 8),
               Text(productPrice, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 4),
-              Text('Weight: $productWeight', style: TextStyle(color: Colors.grey[600])),
+              
 
               const SizedBox(height: 12),
               const Divider(),

@@ -34,8 +34,6 @@ class CartPage extends StatelessWidget {
               children: [
                 Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
                 const SizedBox(height: 6),
-                Text('Quantity : $qty', style: TextStyle(color: Colors.grey[600])),
-                Text('date: $date', style: TextStyle(color: Colors.grey[600])),
                 Text('price: $price', style: TextStyle(color: Colors.grey[600])),
               ],
             ),

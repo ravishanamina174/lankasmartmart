@@ -107,7 +107,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final productNames = ['Fresh Strawberry', 'Red Apple', 'Banana', 'Mango'];
-    final productPrices = ['RS 2650/kg', 'RS 180/kg', 'RS 120/kg', 'RS 350/kg'];
+    final productPrices = ['RS 1300/500g', 'RS 280/500g', 'RS 120/500g', 'RS 350/500g'];
     final productImages = [
       'assets/images/strawberry.png',
       'assets/images/red_apple.png',

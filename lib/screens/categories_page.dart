@@ -96,14 +96,14 @@ class CategoriesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final fruits = [
       {'name': 'Fresh Grapes', 'price': 'RS 1630/500g', 'image': 'assets/images/grapes.png'},
-      {'name': 'Fresh Strawberry', 'price': 'RS 2650/kg', 'image': 'assets/images/strawberry.png'},
-      {'name': 'Red Apple', 'price': 'RS 180/kg', 'image': 'assets/images/red_apple.png'},
+      {'name': 'Fresh Strawberry', 'price': 'RS 1300/500g', 'image': 'assets/images/strawberry.png'},
+      {'name': 'Red Apple', 'price': 'RS 280/500g', 'image': 'assets/images/red_apple.png'},
     ];
 
     final vegetables = [
-      {'name': 'Brinjal', 'price': 'RS 90/kg', 'image': 'assets/images/brinjal.png'},
-      {'name': 'Leek', 'price': 'RS 120/kg', 'image': 'assets/images/leek.png'},
-      {'name': 'Carrot', 'price': 'RS 140/kg', 'image': 'assets/images/carrot.png'},
+      {'name': 'Brinjal', 'price': 'RS 90/500g', 'image': 'assets/images/brinjal.png'},
+      {'name': 'Leek', 'price': 'RS 120/500g', 'image': 'assets/images/leek.png'},
+      {'name': 'Carrot', 'price': 'RS 140/500g', 'image': 'assets/images/carrot.png'},
     ];
 
     return Scaffold(
