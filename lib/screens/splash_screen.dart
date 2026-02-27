@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'signup_page.dart';
+import 'home_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -19,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     _animation = Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut))
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const SignUpPage()));
+          _navigateBasedOnAuthState();
         }
       });
 
@@ -27,6 +29,23 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _controller.forward();
     });
+  }
+
+  Future<void> _navigateBasedOnAuthState() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (!mounted) return;
+    
+    if (user != null) {
+      // User is authenticated
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const HomePage()),
+      );
+    } else {
+      // User is NOT authenticated
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const SignUpPage()),
+      );
+    }
   }
 
   @override

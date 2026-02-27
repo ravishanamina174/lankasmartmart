@@ -22,30 +22,66 @@ class CartItem {
 
 class CartProvider extends ChangeNotifier {
   final Map<String, CartItem> _items = {}; // keyed by product name
+  String? _currentUserUID;
 
   CartProvider() {
     _init();
   }
 
   Future<void> _init() async {
-    // prepare local database and load any existing rows
+    // prepare local database
     await CartDbHelper.init();
-    await _loadLocalItems();
     _listenConnectivity();
-    // also react to auth changes so we can sync when user logs in
+    // react to auth changes to load/clear cart based on user
     FirebaseAuth.instance.authStateChanges().listen((user) {
       if (user != null) {
-        _syncUnsynced();
+        _currentUserUID = user.uid;
+        _loadCartForUser(user.uid);
       } else {
-        // user signed out, clear in-memory cart
+        _currentUserUID = null;
         _items.clear();
         notifyListeners();
       }
     });
   }
 
-  Future<void> _loadLocalItems() async {
-    final rows = await CartDbHelper.getAllRows();
+  Future<void> _loadCartForUser(String uid) async {
+    _items.clear();
+    
+    // Try to load from Firebase first if online
+    final online = await _isOnline();
+    if (online) {
+      await _loadFromFirebase(uid);
+    } else {
+      // Load from SQLite if offline
+      await _loadLocalItems(uid);
+    }
+    notifyListeners();
+  }
+
+  Future<void> _loadFromFirebase(String uid) async {
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(uid)
+          .collection('cart')
+          .get();
+      
+      for (final doc in snapshot.docs) {
+        final name = doc['productName'] as String;
+        final price = (doc['price'] as num).toDouble();
+        final units = doc['units'] as int;
+        final image = doc['image'] as String? ?? '';
+        _items[name] = CartItem(name: name, image: image, price: price, units: units);
+      }
+    } catch (e) {
+      // If Firebase fails, fall back to SQLite
+      await _loadLocalItems(uid);
+    }
+  }
+
+  Future<void> _loadLocalItems(String uid) async {
+    final rows = await CartDbHelper.getAllRows(uid);
     for (final row in rows) {
       final name = row['productName'] as String;
       final price = row['price'] as num;
@@ -53,13 +89,12 @@ class CartProvider extends ChangeNotifier {
       final image = row['image'] as String? ?? '';
       _items[name] = CartItem(name: name, image: image, price: price.toDouble(), units: units);
     }
-    notifyListeners();
   }
 
   void _listenConnectivity() {
     Connectivity().onConnectivityChanged.listen((result) {
-      if (result != ConnectivityResult.none) {
-        _syncUnsynced();
+      if (result != ConnectivityResult.none && _currentUserUID != null) {
+        _syncUnsynced(_currentUserUID!);
       }
     });
   }
@@ -69,10 +104,8 @@ class CartProvider extends ChangeNotifier {
     return res != ConnectivityResult.none;
   }
 
-  Future<void> _syncUnsynced() async {
-    final uid = FirebaseAuth.instance.currentUser?.uid;
-    if (uid == null) return;
-    final unsynced = await CartDbHelper.getUnsynced();
+  Future<void> _syncUnsynced(String uid) async {
+    final unsynced = await CartDbHelper.getUnsynced(uid);
     for (final row in unsynced) {
       final id = row['id'] as int;
       final name = row['productName'] as String;
@@ -106,6 +139,9 @@ class CartProvider extends ChangeNotifier {
   }
 
   Future<void> addItem({required String name, required String priceString, required String image}) async {
+    final uid = _currentUserUID;
+    if (uid == null) return;
+
     final price = parsePrice(priceString);
     if (_items.containsKey(name)) {
       _items[name]!.units += 1;
@@ -114,36 +150,40 @@ class CartProvider extends ChangeNotifier {
     }
     notifyListeners();
     // persist according to connectivity
-    await _handleAddOrUpdate(name, price, image, _items[name]!.units);
+    await _handleAddOrUpdate(uid, name, price, image, _items[name]!.units);
   }
 
   Future<void> addUnit(String name) async {
-    if (_items.containsKey(name)) {
-      _items[name]!.units += 1;
-      notifyListeners();
-      await _handleAddOrUpdate(name, _items[name]!.price, _items[name]!.image, _items[name]!.units);
-    }
+    final uid = _currentUserUID;
+    if (uid == null || !_items.containsKey(name)) return;
+    
+    _items[name]!.units += 1;
+    notifyListeners();
+    await _handleAddOrUpdate(uid, name, _items[name]!.price, _items[name]!.image, _items[name]!.units);
   }
 
   Future<void> removeUnit(String name) async {
-    if (!_items.containsKey(name)) return;
+    final uid = _currentUserUID;
+    if (uid == null || !_items.containsKey(name)) return;
+    
     final item = _items[name]!;
     item.units -= 1;
     if (item.units <= 0) {
       _items.remove(name);
-      await _handleRemoval(name);
+      await _handleRemoval(uid, name);
     } else {
-      await _handleAddOrUpdate(name, item.price, item.image, item.units);
+      await _handleAddOrUpdate(uid, name, item.price, item.image, item.units);
     }
     notifyListeners();
   }
 
   Future<void> removeItem(String name) async {
-    if (_items.containsKey(name)) {
-      _items.remove(name);
-      notifyListeners();
-      await _handleRemoval(name);
-    }
+    final uid = _currentUserUID;
+    if (uid == null || !_items.containsKey(name)) return;
+    
+    _items.remove(name);
+    notifyListeners();
+    await _handleRemoval(uid, name);
   }
 
   List<CartItem> get items => _items.values.toList();
@@ -164,10 +204,9 @@ class CartProvider extends ChangeNotifier {
 
   String formatRs(double value) => 'RS ${value.toStringAsFixed(2)}';
 
-  Future<void> _handleAddOrUpdate(String name, double price, String image, int units) async {
+  Future<void> _handleAddOrUpdate(String uid, String name, double price, String image, int units) async {
     final online = await _isOnline();
-    final uid = FirebaseAuth.instance.currentUser?.uid;
-    if (online && uid != null) {
+    if (online) {
       // save/update on firestore only
       final ref = FirebaseFirestore.instance
           .collection('Users')
@@ -182,14 +221,13 @@ class CartProvider extends ChangeNotifier {
       // do not touch local DB when online per requirements
     } else {
       // offline: persist locally with isSynced=0
-      await CartDbHelper.insertOrUpdate(name, price, units, image: image, isSynced: 0);
+      await CartDbHelper.insertOrUpdate(uid, name, price, units, image: image, isSynced: 0);
     }
   }
 
-  Future<void> _handleRemoval(String name) async {
+  Future<void> _handleRemoval(String uid, String name) async {
     final online = await _isOnline();
-    final uid = FirebaseAuth.instance.currentUser?.uid;
-    if (online && uid != null) {
+    if (online) {
       // remove from firestore only
       await FirebaseFirestore.instance
           .collection('Users')
@@ -199,7 +237,8 @@ class CartProvider extends ChangeNotifier {
           .delete();
     } else {
       // offline: remove from local db
-      await CartDbHelper.deleteItem(name);
+      await CartDbHelper.deleteItem(uid, name);
     }
   }
 }
+
