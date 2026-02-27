@@ -67,12 +67,16 @@ class CartProvider extends ChangeNotifier {
           .collection('cart')
           .get();
       
+      // clear local cache and repopulate to keep SQLite in sync
+      await CartDbHelper.clearUserCart(uid);
       for (final doc in snapshot.docs) {
         final name = doc['productName'] as String;
         final price = (doc['price'] as num).toDouble();
         final units = doc['units'] as int;
         final image = doc['image'] as String? ?? '';
         _items[name] = CartItem(name: name, image: image, price: price, units: units);
+        // store locally as synced cache
+        await CartDbHelper.insertOrUpdate(uid, name, price, units, image: image, isSynced: 1);
       }
     } catch (e) {
       // If Firebase fails, fall back to SQLite
@@ -86,6 +90,7 @@ class CartProvider extends ChangeNotifier {
       final name = row['productName'] as String;
       final price = row['price'] as num;
       final units = row['units'] as int;
+      if (units <= 0) continue; // deleted entry, ignore
       final image = row['image'] as String? ?? '';
       _items[name] = CartItem(name: name, image: image, price: price.toDouble(), units: units);
     }
@@ -93,8 +98,11 @@ class CartProvider extends ChangeNotifier {
 
   void _listenConnectivity() {
     Connectivity().onConnectivityChanged.listen((result) {
-      if (result != ConnectivityResult.none && _currentUserUID != null) {
+      if (_currentUserUID == null) return;
+      if (result != ConnectivityResult.none) {
+        // when connection is restored, sync local modifications and refresh from firebase
         _syncUnsynced(_currentUserUID!);
+        _loadCartForUser(_currentUserUID!);
       }
     });
   }
@@ -111,18 +119,25 @@ class CartProvider extends ChangeNotifier {
       final name = row['productName'] as String;
       final price = (row['price'] as num).toDouble();
       final units = row['units'] as int;
-      // push to firestore using doc id = product name to avoid duplicates
       final ref = FirebaseFirestore.instance
           .collection('Users')
           .doc(uid)
           .collection('cart')
           .doc(name);
-      await ref.set({
-        'productName': name,
-        'price': price,
-        'units': units,
-      });
-      await CartDbHelper.markSynced(id);
+      if (units <= 0) {
+        // this is a deletion request
+        await ref.delete();
+        // remove from local database entirely
+        await CartDbHelper.deleteItem(uid, name);
+      } else {
+        // standard add/update
+        await ref.set({
+          'productName': name,
+          'price': price,
+          'units': units,
+        });
+        await CartDbHelper.markSynced(id);
+      }
     }
   }
 
@@ -218,7 +233,8 @@ class CartProvider extends ChangeNotifier {
         'price': price,
         'units': units,
       });
-      // do not touch local DB when online per requirements
+      // update local cache so offline view is consistent
+      await CartDbHelper.insertOrUpdate(uid, name, price, units, image: image, isSynced: 1);
     } else {
       // offline: persist locally with isSynced=0
       await CartDbHelper.insertOrUpdate(uid, name, price, units, image: image, isSynced: 0);
@@ -235,9 +251,12 @@ class CartProvider extends ChangeNotifier {
           .collection('cart')
           .doc(name)
           .delete();
+      // also remove from local cache to avoid stale entries
+      await CartDbHelper.deleteItem(uid, name);
     } else {
       // offline: remove from local db
-      await CartDbHelper.deleteItem(uid, name);
+      // mark deletion so that sync can process it
+      await CartDbHelper.updateUnits(uid, name, 0, isSynced: 0);
     }
   }
 }
