@@ -105,7 +105,7 @@ class ProductDetailsPage extends StatelessWidget {
                               Provider.of<CartProvider>(context, listen: false).addItem(
                                 name: productName,
                                 priceString: productPrice,
-                                image: _getProductImage(productName),
+                                imagePath: _getProductImage(productName),
                               );
                             },
                             child: Container(
@@ -115,7 +115,7 @@ class ProductDetailsPage extends StatelessWidget {
                                   Provider.of<CartProvider>(context, listen: false).addItem(
                                     name: productName,
                                     priceString: productPrice,
-                                    image: _getProductImage(productName),
+                                    imagePath: _getProductImage(productName),
                                   );
                                 },
                                 icon: const Icon(Icons.add, color: Colors.white),
@@ -159,7 +159,7 @@ class ProductDetailsPage extends StatelessWidget {
                     Provider.of<CartProvider>(context, listen: false).addItem(
                       name: productName,
                       priceString: productPrice,
-                      image: _getProductImage(productName),
+                      imagePath: _getProductImage(productName),
                     );
                   },
                   child: const Text('Add to Cart', style: TextStyle(fontSize: 18, color: Colors.white)),

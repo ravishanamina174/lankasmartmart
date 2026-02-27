@@ -59,13 +59,13 @@ class CategoriesPage extends StatelessWidget {
               alignment: Alignment.bottomRight,
               child: GestureDetector(
                 onTap: () {
-                  Provider.of<CartProvider>(context, listen: false).addItem(name: name, priceString: price, image: imageAsset);
+                  Provider.of<CartProvider>(context, listen: false).addItem(name: name, priceString: price, imagePath: imageAsset);
                 },
                 child: Container(
                   decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.orange),
                   child: IconButton(
                     onPressed: () {
-                      Provider.of<CartProvider>(context, listen: false).addItem(name: name, priceString: price, image: imageAsset);
+                      Provider.of<CartProvider>(context, listen: false).addItem(name: name, priceString: price, imagePath: imageAsset);
                     },
                     icon: const Icon(Icons.add, color: Colors.white),
                   ),

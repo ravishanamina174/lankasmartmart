@@ -46,8 +46,8 @@ class CartDbHelper {
     return await _db!.query('cart_table', where: 'userUID = ?', whereArgs: [userUID]);
   }
 
-  static Future<int> insertOrUpdate(String userUID, String name, double price, int units,
-      {required String image, int isSynced = 0}) async {
+    static Future<int> insertOrUpdate(String userUID, String name, double price, int units,
+      {required String imagePath, int isSynced = 0}) async {
     if (_db == null) await init();
     final existing = await _db!.query(
       'cart_table',
@@ -56,8 +56,8 @@ class CartDbHelper {
     );
     if (existing.isNotEmpty) {
       return await _db!.update(
-        'cart_table',
-        {'price': price, 'units': units, 'isSynced': isSynced, 'image': image},
+      'cart_table',
+      {'price': price, 'units': units, 'isSynced': isSynced, 'image': imagePath},
         where: 'userUID = ? AND productName = ?',
         whereArgs: [userUID, name],
       );
@@ -68,7 +68,7 @@ class CartDbHelper {
         'price': price,
         'units': units,
         'isSynced': isSynced,
-        'image': image,
+        'image': imagePath,
       });
     }
   }

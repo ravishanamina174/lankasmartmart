@@ -8,13 +8,13 @@ import '../services/cart_database.dart';
 
 class CartItem {
   final String name;
-  final String image;
+  final String imagePath; // local asset path
   final double price; // price per unit
   int units;
 
   CartItem({
     required this.name,
-    required this.image,
+    required this.imagePath,
     required this.price,
     this.units = 1,
   });
@@ -73,10 +73,16 @@ class CartProvider extends ChangeNotifier {
         final name = doc['productName'] as String;
         final price = (doc['price'] as num).toDouble();
         final units = doc['units'] as int;
-        final image = doc['image'] as String? ?? '';
-        _items[name] = CartItem(name: name, image: image, price: price, units: units);
+        // older documents may have used key 'image' instead of 'imagePath'
+        String imagePath = '';
+        if (doc.data().containsKey('imagePath')) {
+          imagePath = doc['imagePath'] as String? ?? '';
+        } else if (doc.data().containsKey('image')) {
+          imagePath = doc['image'] as String? ?? '';
+        }
+        _items[name] = CartItem(name: name, imagePath: imagePath, price: price, units: units);
         // store locally as synced cache
-        await CartDbHelper.insertOrUpdate(uid, name, price, units, image: image, isSynced: 1);
+        await CartDbHelper.insertOrUpdate(uid, name, price, units, imagePath: imagePath, isSynced: 1);
       }
     } catch (e) {
       // If Firebase fails, fall back to SQLite
@@ -91,8 +97,8 @@ class CartProvider extends ChangeNotifier {
       final price = row['price'] as num;
       final units = row['units'] as int;
       if (units <= 0) continue; // deleted entry, ignore
-      final image = row['image'] as String? ?? '';
-      _items[name] = CartItem(name: name, image: image, price: price.toDouble(), units: units);
+      final imagePath = row['image'] as String? ?? '';
+      _items[name] = CartItem(name: name, imagePath: imagePath, price: price.toDouble(), units: units);
     }
   }
 
@@ -119,6 +125,7 @@ class CartProvider extends ChangeNotifier {
       final name = row['productName'] as String;
       final price = (row['price'] as num).toDouble();
       final units = row['units'] as int;
+      final imagePath = row['image'] as String? ?? '';
       final ref = FirebaseFirestore.instance
           .collection('Users')
           .doc(uid)
@@ -135,6 +142,7 @@ class CartProvider extends ChangeNotifier {
           'productName': name,
           'price': price,
           'units': units,
+          'imagePath': imagePath,
         });
         await CartDbHelper.markSynced(id);
       }
@@ -153,7 +161,7 @@ class CartProvider extends ChangeNotifier {
     return 0.0;
   }
 
-  Future<void> addItem({required String name, required String priceString, required String image}) async {
+  Future<void> addItem({required String name, required String priceString, required String imagePath}) async {
     final uid = _currentUserUID;
     if (uid == null) return;
 
@@ -161,11 +169,11 @@ class CartProvider extends ChangeNotifier {
     if (_items.containsKey(name)) {
       _items[name]!.units += 1;
     } else {
-      _items[name] = CartItem(name: name, image: image, price: price);
+      _items[name] = CartItem(name: name, imagePath: imagePath, price: price);
     }
     notifyListeners();
     // persist according to connectivity
-    await _handleAddOrUpdate(uid, name, price, image, _items[name]!.units);
+    await _handleAddOrUpdate(uid, name, price, imagePath, _items[name]!.units);
   }
 
   Future<void> addUnit(String name) async {
@@ -174,7 +182,7 @@ class CartProvider extends ChangeNotifier {
     
     _items[name]!.units += 1;
     notifyListeners();
-    await _handleAddOrUpdate(uid, name, _items[name]!.price, _items[name]!.image, _items[name]!.units);
+    await _handleAddOrUpdate(uid, name, _items[name]!.price, _items[name]!.imagePath, _items[name]!.units);
   }
 
   Future<void> removeUnit(String name) async {
@@ -187,7 +195,7 @@ class CartProvider extends ChangeNotifier {
       _items.remove(name);
       await _handleRemoval(uid, name);
     } else {
-      await _handleAddOrUpdate(uid, name, item.price, item.image, item.units);
+      await _handleAddOrUpdate(uid, name, item.price, item.imagePath, item.units);
     }
     notifyListeners();
   }
@@ -232,12 +240,13 @@ class CartProvider extends ChangeNotifier {
         'productName': name,
         'price': price,
         'units': units,
+        'imagePath': image,
       });
       // update local cache so offline view is consistent
-      await CartDbHelper.insertOrUpdate(uid, name, price, units, image: image, isSynced: 1);
+      await CartDbHelper.insertOrUpdate(uid, name, price, units, imagePath: image, isSynced: 1);
     } else {
       // offline: persist locally with isSynced=0
-      await CartDbHelper.insertOrUpdate(uid, name, price, units, image: image, isSynced: 0);
+        await CartDbHelper.insertOrUpdate(uid, name, price, units, imagePath: image, isSynced: 0);
     }
   }
 
