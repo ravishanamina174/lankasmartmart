@@ -186,10 +186,24 @@ class _CartPageState extends State<CartPage> {
       );
     }
     final items = cart.items;
-    final itemCount = items.length;
-    final total = cart.total;
-    final delivery = cart.deliveryCharges;
-    final subTotal = cart.subTotal;
+
+// 🔥 DEBUG: Print SQLite items
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    print("========== SQLITE CART DATA ==========");
+    for (var item in items) {
+      print("✅Name: ${item.name}");
+      print("Price: ${item.price}");
+      print("Units: ${item.units}");
+      print("Image: ${item.imagePath}");
+      print("----------------------------------");
+    }
+  });
+
+  final itemCount = items.length;
+  final total = cart.total;
+  final delivery = cart.deliveryCharges;
+  final subTotal = cart.subTotal;
+
     return Column(
       children: [
         Expanded(
