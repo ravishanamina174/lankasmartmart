@@ -3,10 +3,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'screens/splash_screen.dart';
 import 'models/cart_model.dart';
+import 'services/notification_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Required
-  await Firebase.initializeApp();            // Initialize Firebase
+  await Firebase.initializeApp(); // Initialize Firebase
+  // make sure our Firestore notification collection contains the
+  // default documents; this is lightweight and idempotent.
+  await NotificationService.ensureDefaults();
   runApp(const MyApp());
 }
 

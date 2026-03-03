@@ -1,10 +1,62 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+
 import 'home_page.dart';
 import 'categories_page.dart';
 import 'cart_page.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  File? _profileImage;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProfileImage();
+  }
+
+  Future<void> _loadProfileImage() async {
+    try {
+      final dir = await getApplicationDocumentsDirectory();
+      final file = File('${dir.path}/profile_pic.jpg');
+      if (await file.exists()) {
+        if (!mounted) return;
+        setState(() {
+          _profileImage = file;
+        });
+      }
+    } catch (_) {
+      // ignore; we'll just show default asset
+    }
+  }
+
+  Future<void> _pickImage() async {
+    try {
+      final picked = await ImagePicker().pickImage(source: ImageSource.camera);
+      if (picked == null) return; // user cancelled or permission denied
+      final dir = await getApplicationDocumentsDirectory();
+      final saved = await File(picked.path).copy('${dir.path}/profile_pic.jpg');
+      if (!mounted) return;
+      setState(() {
+        _profileImage = saved;
+      });
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Unable to open camera: ${e.toString()}')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +80,31 @@ class ProfilePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Avatar
+            // Avatar with camera overlay
             const SizedBox(height: 8),
             Center(
-              child: CircleAvatar(
-                radius: 48,
-                backgroundImage: AssetImage('assets/images/boy.png'),
-                backgroundColor: Colors.grey[300],
+              child: Stack(
+                children: [
+                  CircleAvatar(
+                    radius: 48,
+                    backgroundImage: _profileImage != null
+                        ? FileImage(_profileImage!) as ImageProvider
+                        : const AssetImage('assets/images/boy.png'),
+                    backgroundColor: Colors.grey[300],
+                  ),
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: GestureDetector(
+                      onTap: _pickImage,
+                      child: CircleAvatar(
+                        radius: 16,
+                        backgroundColor: Colors.white,
+                        child: Icon(Icons.camera_alt, size: 18, color: Colors.black54),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 12),

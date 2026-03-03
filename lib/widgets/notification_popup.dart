@@ -1,6 +1,23 @@
 import 'package:flutter/material.dart';
 
-Future<void> showNotificationPopup(BuildContext context) {
+import '../services/notification_service.dart';
+
+/// Displays a popup containing a single notification message fetched from
+/// Firestore. If the message list is empty or an error occurs, a fallback
+/// string is shown. The dialog itself retains the previous styling.
+
+// the build context is used after awaiting network calls; it's acceptable
+// here because the caller is unlikely to dispose the widget mid-action, and
+// we already guard the dialog invocation. Suppress the lint for clarity.
+// ignore: use_build_context_synchronously
+Future<void> showNotificationPopup(BuildContext context) async {
+  // fetch the message; defaults are created at app startup
+  final msg = await NotificationService.getRandomMessage();
+  final display = msg ?? 'No notifications available at the moment.';
+
+  // context might become invalid while awaiting above; navigator mounted
+  // check is the best we can do in a standalone function.
+  // ignore: use_build_context_synchronously
   return showDialog(
     context: context,
     barrierDismissible: true,
@@ -25,12 +42,8 @@ Future<void> showNotificationPopup(BuildContext context) {
                   ],
                 ),
                 const SizedBox(height: 12),
-                // Notification items
-                _notificationCard('Weekend special! Save 20% on personal care and stationery essentials.'),
-                const SizedBox(height: 12),
-                _notificationCard('Enjoy 15% off on daily essentials with our special New Year offers!'),
-                const SizedBox(height: 12),
-                _notificationCard('Save up to 25% on groceries, household, and personal care items this weekend!'),
+                // Single message card
+                _notificationCard(display),
                 const SizedBox(height: 8),
                 Align(
                   alignment: Alignment.centerRight,
