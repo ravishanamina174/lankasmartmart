@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- camera permission required for profile picture capture -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <!-- required on Android 13+ to post notifications -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
         android:label="lankasmartmart"
         android:name="${applicationName}"

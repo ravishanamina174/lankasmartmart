@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'payment_success_page.dart';
+import '../services/notification_service.dart';
 import '../models/cart_model.dart';
 
 class PaymentPage extends StatelessWidget {
@@ -154,6 +155,9 @@ class PaymentPage extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
+                        // fire a notification immediately (only one will
+                        // appear) then navigate to the success screen.
+                        NotificationService.showPaymentSuccessNotification();
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (_) => const PaymentSuccessPage()),
