@@ -40,21 +40,21 @@ class NotificationService {
     {
       'id': 'msg1',
       'message':
-          'New Year Offer! Enjoy up to 30% off on all soft drinks & snacks!'
+          'Your order has been successfully placed at Lankasmartmart! 🛍️'
     },
     {
       'id': 'msg2',
-      'message': 'Weekend Deals — Fresh fruits & veggies at 20% off!'
+      'message': 'Your groceries are being packed carefully at Lankasmartmart.'
     },
     {
       'id': 'msg3',
       'message':
-          'Midweek Madness! Get 15% off selected dairy & bakery items!'
+          'Your payment was completed successfully ✅'
     },
     {
       'id': 'msg4',
       'message':
-          'Earn 2× loyalty points today on groceries above Rs. 2,000!'
+          'Thanks for choosing Lankasmartmart 🧡'
     },
   ];
 
