@@ -1,60 +1,13 @@
 import 'package:flutter/material.dart';
 import '../widgets/notification_popup.dart';
+import '../widgets/LocationSection.dart';
 
 class LocationPage extends StatelessWidget {
   const LocationPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Dummy map placeholder
-    Widget mapBox = Container(
-      height: 220,
-      decoration: BoxDecoration(
-        color: Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade300),
-      ),
-      child: Stack(
-        children: [
-          // Display location image
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(18),
-            ),
-            child: Image.asset(
-              'assets/images/location.jpeg',
-              fit: BoxFit.cover,
-            ),
-          ),
-          // Zoom controls (dummy)
-          Positioned(
-            right: 12,
-            top: 12,
-            child: Column(
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.black,
-                  radius: 16,
-                  child: const Icon(Icons.add, color: Colors.white, size: 18),
-                ),
-                const SizedBox(height: 8),
-                CircleAvatar(
-                  backgroundColor: Colors.black,
-                  radius: 16,
-                  child: const Icon(Icons.remove, color: Colors.white, size: 18),
-                ),
-                const SizedBox(height: 8),
-                CircleAvatar(
-                  backgroundColor: Colors.green,
-                  radius: 16,
-                  child: const Icon(Icons.my_location, color: Colors.white, size: 18),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+    const Widget mapBox = LocationSection();
 
     return Scaffold(
       appBar: AppBar(

@@ -3,10 +3,17 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- required on Android 13+ to post notifications -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- location permissions for real-time user location -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- internet permissions for loading map tiles -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:label="lankasmartmart"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"
             android:exported="true"
